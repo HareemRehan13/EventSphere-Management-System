@@ -1,0 +1,86 @@
+
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate } from 'react-router-dom';
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import App from './App.jsx';  // Agar App use karna ho toh
+import Login from './Pages/Login.tsx';
+import Register from './Pages/Register.tsx';
+import ForgetPassword from './Pages/ForgetPassword.tsx';
+import VerifyOTP from './Pages/VerifyOTP.tsx';
+import PasswordReset from './Pages/PasswordReset.tsx';
+import Dashboard from './Pages/Dashboard.tsx';
+import Exhibitor from './Pages/Exhibitor.tsx';
+import CreateExpoEvent from './Pages/CreateExpoEvent.tsx';
+import CreateBooth from './Pages/CreateBooth.tsx';
+import Attendee from './Pages/Attendee.tsx';
+import ShowAllBooth from './Pages/ShowAllBooth.tsx';
+import VerifyCode from './Pages/VerifyCode.tsx';
+import ShowAllExpos from './Pages/ShowAllExpos.tsx';
+import UpdateEvent from './Pages/UpdateEvent.tsx';
+import AllRequests from './Pages/AllRequests.tsx';
+import Allexhibitors from './Pages/AllExhibitors.tsx';
+import RegisterCompany from './Pages/RegisterCompany.tsx';
+import Allcompanies from './Pages/ShowAllCompanies.tsx';
+import EditCompany from './Pages/UpdateCompany.tsx';
+import _404 from './Error/_404.tsx';
+
+import LayoutAttendee from './Components/attendee/layout-attendee.tsx';
+import { EventList } from './Components/attendee/event-list.tsx';
+import { ExhibitorSearch } from './Components/attendee/exhibitor-search.tsx';
+import { ScheduleManager } from './Components/attendee/schedule-manager.tsx';
+
+import ProtectedRoute from './ProtectedRoute.jsx';
+
+import Home from './Pages/HomePage'; 
+import './index.css'
+
+const value = localStorage.getItem('token');
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      {/* Root path "/" pe Home show karo */}
+      <Route path="/" element={value ? <Navigate to="/dashboard" replace /> : <Home /> } />
+
+      {/* Login, Register etc as separate routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forget-password" element={<ForgetPassword />} />
+      <Route path="/verify/:otp" element={<VerifyCode />} />
+      <Route path="/verify-otp/:otp?" element={<VerifyOTP />} />
+      <Route path="/reset-password" element={<PasswordReset />} />
+
+      {/* Dashboard protected routes */}
+      <Route path="/dashboard" element={<ProtectedRoute />}>
+        <Route index element={<Dashboard />} />
+        <Route path="expoevents" element={<CreateExpoEvent />} />
+        <Route path="editexpo/:expoId" element={<UpdateEvent />} />
+        <Route path="booth" element={<CreateBooth />} />
+        <Route path="allbooths" element={<ShowAllBooth />} />
+        <Route path="allevents" element={<ShowAllExpos />} />
+        <Route path="exhibitor" element={<Exhibitor />} />
+        <Route path="requests" element={<AllRequests />} />
+        <Route path="exhibitors" element={<Allexhibitors />} />
+        <Route path="register-company" element={<RegisterCompany />} />
+        <Route path="allcompanies" element={<Allcompanies />} />
+        <Route path="editcompany/:companyId" element={<EditCompany />} />
+        <Route path="attendee" element={<LayoutAttendee />}>
+          <Route index element={<Attendee />} />
+          <Route path="events" element={<EventList />} />
+          <Route path="exhibitor" element={<ExhibitorSearch />} />
+          <Route path="schedule" element={<ScheduleManager />} />
+        </Route>
+      </Route>
+
+      {/* 404 page */}
+      <Route path="*" element={<_404 />} />
+    </>
+  )
+);
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
+);
