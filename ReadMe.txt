@@ -1,6 +1,6 @@
-Admin:
-@gmail.com 
-Password:
+Organizer:
+hareem@gmail.com 
+Password:herry1234
 
 
 Attendee:
