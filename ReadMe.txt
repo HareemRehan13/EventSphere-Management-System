@@ -1,16 +1,15 @@
 Admin:
-fizzab558@gmail.com 
-Password:@fizza2124
+@gmail.com 
+Password:
 
 
 Attendee:
-Maha123@gmail.com
-Pass:@maha2124
+@gmail.com
+Pass:
 
 Exhibitor:
-Marfia123@gmail.com
-Pass:@marfia2124
-
+@gmail.com
+Pass:
 
 Running commands:
 npm start    				//to run the backend
