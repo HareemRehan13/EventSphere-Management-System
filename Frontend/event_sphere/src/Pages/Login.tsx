@@ -31,57 +31,49 @@ const Login = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true)
     setProgress(20)
     console.log(values)
-    try {
-      setProgress(50)
-      axios.post('api/users/login', values)
-        .then(response => {
-          setProgress(65)
-          console.log(response.data)
-          if (response.status === 200 && response.data.token) {
-            setProgress(80)
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            toast({
-              variant: "default",
-              title: "Success",
-              description: "You have been logged in successfully",
-            })
-            setProgress(100)
 
-            const userRole = response.data.user.role;
-            if (userRole === 'ATTENDEE') {
-              setLoading(false)
-              navigate('/dashboard/attendee');
-            } else {
-              setLoading(false)
-              navigate('/dashboard');
-            }
-          }
-        })
-        .catch(error => {
-          setLoading(false)
-          console.log(error)
-          console.error("Error: ", error.response.data.message);
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: error.response.data.message,
-          })
-        })
+   try {
+  setProgress(50)
+  const response = await axios.post('/api/users/login', values)
 
-    } catch (error) {
-      console.error("Error: ", error.response.data.message);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.response.data.message,
-      })
+  setProgress(65)
+  console.log(response.data)
+
+  if (response.status === 200 && response.data.token) {
+    setProgress(80)
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+    toast({
+      variant: "default",
+      title: "Success",
+      description: "You have been logged in successfully",
+    })
+    setProgress(100)
+
+    const userRole = response.data.user.role;
+    if (userRole === 'ATTENDEE') {
+      setLoading(false)
+      navigate('/dashboard/attendee');
+    } else {
+      setLoading(false)
+      navigate('/dashboard');
     }
   }
+} catch (error: any) {
+  setLoading(false);
+  console.error("Error: ", error?.response?.data?.message || error.message);
+  toast({
+    variant: "destructive",
+    title: "Error",
+    description: error?.response?.data?.message || "Unexpected error occurred",
+  });
+}
+  }
+  
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">

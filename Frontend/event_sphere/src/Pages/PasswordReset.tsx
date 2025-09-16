@@ -44,65 +44,77 @@ const PasswordReset = () => {
     })
 
 
-    async function onSubmitPassword(values: z.infer<typeof formPasswordSchema>) {
-        setLoading(true)
-        setProgress(20)
-        console.log(values)
-        try {
-            const secretKey = import.meta.env.VITE_SECRET_KEY
-            const secret = new TextEncoder().encode(secretKey)
-            setProgress(30)
-            const decodedEmail = await jwtVerify(token, secret, { issuer: 'event-sphere', audience: 'event-sphere' })
-                .then((decoded) => {
-                    setProgress(50)
-                    console.log(decoded)
-                    return decoded.payload.email
-                })
-                .catch((error) => {
-                    console.error(error)
-                    toast({
-                        variant: "destructive",
-                        title: "Error",
-                        description: "Invalid Token",
-                    })
-                })
-            console.log(decodedEmail)
-            setProgress(70)
-            axios.post('/api/reset-password', { password: values.password, email: decodedEmail })
-                .then(response => {
-                    setProgress(100)
-                    console.log(response.data)
-                    if (response.status === 200) {
-                        localStorage.removeItem('jwt_token')
-                        toast({
-                            variant: "success",
-                            title: "Success",
-                            description: "Password reset successfully.",
-                        })
-                        setLoading(false)
-                        navigate('/')
-                    }
-                })
-                .catch(error => {
-                    setLoading(false)
-                    console.log(error)
-                    console.error("Error: ", error.response.data.message);
-                    toast({
-                        variant: "destructive",
-                        title: "Error",
-                        description: error.response.data.message,
-                    })
-                })
-        }
-        catch (error) {
-            console.error("Error: ", error.response.data.message);
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: error.response.data.message,
-            })
-        }
+  async function onSubmitPassword(values: z.infer<typeof formPasswordSchema>) {
+  setLoading(true)
+  setProgress(20)
+  console.log(values)
+
+  try {
+    const secretKey = import.meta.env.VITE_SECRET_KEY
+    if (!secretKey) {
+      throw new Error("Missing secret key")
     }
+
+    if (!token) {
+      throw new Error("Token not found, please login again.")
+    }
+
+    const secret = new TextEncoder().encode(secretKey)
+    setProgress(30)
+
+    let decodedEmail: string | null = null
+    try {
+      const decoded = await jwtVerify(token, secret, {
+        issuer: 'event-sphere',
+        audience: 'event-sphere',
+      })
+      setProgress(50)
+      console.log(decoded)
+      decodedEmail = decoded?.payload?.email as string
+    } catch (err) {
+      console.error("JWT error: ", err)
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Invalid or expired token. Please login again.",
+      })
+      setLoading(false)
+      return
+    }
+
+    if (!decodedEmail) {
+      throw new Error("Email could not be decoded from token.")
+    }
+
+    setProgress(70)
+    const response = await axios.post('/api/reset-password', {
+      password: values.password,
+      email: decodedEmail,
+    })
+
+    setProgress(100)
+    console.log(response.data)
+
+    if (response.status === 200) {
+      localStorage.removeItem('jwt_token')
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "Password reset successfully.",
+      })
+      setLoading(false)
+      navigate('/')
+    }
+  } catch (error: any) {
+    setLoading(false)
+    console.error("Error: ", error?.response?.data?.message || error.message)
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: error?.response?.data?.message || "Unexpected error occurred",
+    })
+  }
+}
 
     return (
         <>

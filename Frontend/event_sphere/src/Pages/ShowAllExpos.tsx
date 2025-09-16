@@ -17,8 +17,8 @@ interface ExpoEvents {
   organizerName: string;
   organizerContact: string;
   totalBooths: number;
-  toalBoothsf2: number;
-  totalBooths3: number;
+  totalBooths2: number;  
+  totalBooths3: number;  
 }
 
 const ShowAllExpos: React.FC = () => {
@@ -121,7 +121,8 @@ const ShowAllExpos: React.FC = () => {
                     <span className="font-semibold">Organizer Contact:</span> {expo.organizerContact}
                   </p>
                   <p className="text-sm">
-                    <span className="font-semibold">Total Booths:</span> {expo.totalBooths + expo.totalBoothsf3 + expo.totalBoothsf2}
+<span className="font-semibold">Total Booths:</span>{" "}
+{expo.totalBooths + expo.totalBooths2 + expo.totalBooths3}
                   </p>
                 </CardContent>
                 <CardFooter className="flex justify-between text-sm border-t border-slate-700 pt-2">
