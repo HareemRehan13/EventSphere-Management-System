@@ -3,9 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
-import { Button } from '@/Components/ui/Button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/Form';
-import { Input } from '@/Components/ui/Input'
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import { Input } from '@/components/ui/input'
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from 'react-router-dom';
 import { Toaster } from '@/Components/ui/Toaster';

@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/Components/ui/Button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/Form';
-import { Input } from '@/Components/ui/Input'
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import { Input } from '@/components/ui/input'
 import { BadgeCheck, RotateCcw, LockKeyhole } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useToast } from "@/hooks/use-toast"
 import { Toaster } from '@/Components/ui/Toaster';
 import { jwtVerify } from 'jose';
-import { Progress } from "@/Components/ui/Progress";
+import { Progress } from "@/Components/ui/progress";
 
 const formPasswordSchema = z.object({
     password: z.string().min(6).max(100),

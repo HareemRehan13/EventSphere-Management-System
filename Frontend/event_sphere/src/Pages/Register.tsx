@@ -197,14 +197,14 @@ import React from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/Components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from "@/components/ui/Select";
+} from "@/Components/ui/Select";
 import {
   Form,
   FormControl,
@@ -212,8 +212,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/Components/ui/Form';
-import { Input } from '@/Components/ui/Input';
+} from '@/components/ui/Form';
+import { Input } from '@/components/ui/input';
 import { Key } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';

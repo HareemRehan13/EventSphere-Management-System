@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/Components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
@@ -11,15 +11,15 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/Components/ui/Form';
+} from '@/components/ui/Form';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/Select';
-import { Input } from '@/Components/ui/Input';
+} from '@/Components/ui/Select';
+import { Input } from '@/components/ui/input';
 import { CircleFadingArrowUp } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';

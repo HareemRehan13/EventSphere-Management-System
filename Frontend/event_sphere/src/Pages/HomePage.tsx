@@ -85,7 +85,7 @@ const Home = () => {
       {/* Navigation */}
       <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-logo" onClick={() => scrollToSection('home')}>
-          <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="logo" />
+          {/* <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="logo" /> */}
           <h2>EVENT<span>SPHERE</span></h2>
         </div>
         <ul>
@@ -539,12 +539,13 @@ const Home = () => {
           margin: 0;
           padding: 0;
           box-sizing: border-box;
+      
         }
         
         /* Navigation */
         .nav {
-          background: rgba(6, 12, 34, 0.98);
-          color: #fff;
+          background: rgba(26, 0, 51, 0.95);
+    color: #fff;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -558,8 +559,8 @@ const Home = () => {
         
         .nav.scrolled {
           padding: 15px 100px;
-          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-          background: rgba(0, 10, 40, 0.98);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    background: rgba(15, 0, 40, 0.95);
         }
         
         .nav-logo {
@@ -592,8 +593,7 @@ const Home = () => {
         }
         
         .nav-logo h2 span {
-          color: #f82249;
-        }
+ color:  #7b2cbf;        }
         
         .nav ul {
           display: flex;
@@ -612,12 +612,11 @@ const Home = () => {
         }
         
         .nav li:hover {
-          color: #f82249;
-          transform: translateY(-3px);
+ color:  #7b2cbf;          transform: translateY(-3px);
         }
         
         .nav li.active {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .nav li.active::after {
@@ -627,7 +626,7 @@ const Home = () => {
           left: 0;
           width: 100%;
           height: 2px;
-          background: #f82249;
+         background:  #7b2cbf;
           animation: underlineGrow 0.3s ease-out;
         }
         
@@ -637,9 +636,8 @@ const Home = () => {
         }
         
         .btn-login {
-          background: #f82249;
-          color: white;
-          border: none;
+         background: #7b2cbf;
+    color: white;
           padding: 10px 25px;
           border-radius: 50px;
           cursor: pointer;
@@ -647,14 +645,12 @@ const Home = () => {
           transition: all 0.3s ease;
           font-size: 14px;
           letter-spacing: 1px;
-          box-shadow: 0 2px 10px rgba(248, 34, 73, 0.3);
+          box-shadow: 0 2px 10px rgba(123, 44, 191, 0.4);
         }
         
         .btn-login:hover {
-          background: #e61e42;
-          transform: translateY(-3px);
-          box-shadow: 0 5px 15px rgba(248, 34, 73, 0.4);
-        }
+background: #5a189a;          transform: translateY(-3px);
+ box-shadow: 0 5px 15px rgba(123, 44, 191, 0.6);        }
         
         /* Hero Section */
         #home {
@@ -713,7 +709,7 @@ const Home = () => {
         }
         
         #home h1 span {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         #home p {
@@ -760,7 +756,7 @@ const Home = () => {
         .section-header h2 {
           font-size: 36px;
           font-weight: 700;
-          color: #060c22;
+             color: #1a0033;
           margin-bottom: 15px;
           text-transform: uppercase;
           position: relative;
@@ -776,7 +772,7 @@ const Home = () => {
           transform: translateX(-50%);
           width: 80px;
           height: 2px;
-          background: #f82249;
+            background:  #7b2cbf;
           transition: width 0.3s ease;
         }
         
@@ -797,7 +793,7 @@ const Home = () => {
         }
         
         .section-header span {
-          color: #f82249;
+          color: #7b2cbf;
         }
         
         /* About Section */
@@ -835,7 +831,7 @@ const Home = () => {
           left: 0;
           width: 100%;
           height: 5px;
-          background: #f82249;
+          background:  #7b2cbf;
           transform: scaleX(0);
           transform-origin: left;
           transition: transform 0.3s ease;
@@ -852,7 +848,7 @@ const Home = () => {
         
         .about-box i {
           font-size: 48px;
-          color: #f82249;
+          color:  #7b2cbf;
           margin-bottom: 20px;
           transition: all 0.3s ease;
         }
@@ -870,7 +866,7 @@ const Home = () => {
         }
         
         .about-box:hover h3 {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .about-box p {
@@ -916,7 +912,7 @@ const Home = () => {
           left: 0;
           width: 100%;
           height: 5px;
-          background: #f82249;
+          background:  #7b2cbf;
           transform: scaleX(0);
           transform-origin: right;
           transition: transform 0.3s ease;
@@ -944,7 +940,7 @@ const Home = () => {
         }
         
         .speaker-card:hover .speaker-img-container {
-          border-color: #f82249;
+          border-color:  #7b2cbf;
           transform: scale(1.05);
         }
         
@@ -968,11 +964,11 @@ const Home = () => {
         }
         
         .speaker-card:hover .speaker-name {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .speaker-title {
-          color: #f82249;
+          color:  #7b2cbf;
           font-style: italic;
           margin-bottom: 15px;
           font-size: 16px;
@@ -1010,7 +1006,7 @@ const Home = () => {
         }
         
         .speaker-social a:hover {
-          color: #f82249;
+          color:  #7b2cbf;
           transform: translateY(-5px);
           background: #fff;
           box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -1047,11 +1043,11 @@ const Home = () => {
         }
         
         .schedule-nav button:hover {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .schedule-nav button.active {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .schedule-nav button.active::after {
@@ -1061,7 +1057,7 @@ const Home = () => {
           left: 0;
           width: 100%;
           height: 3px;
-          background: #f82249;
+          background:  #7b2cbf;
           animation: underlineGrow 0.3s ease-out;
         }
         
@@ -1085,7 +1081,7 @@ const Home = () => {
         }
         
         .schedule-day h3 {
-          color: #f82249;
+          color:  #7b2cbf;
           font-size: 24px;
           margin-bottom: 20px;
           display: flex;
@@ -1110,7 +1106,7 @@ const Home = () => {
         
         .schedule-time {
           flex: 0 0 120px;
-          color: #f82249;
+          color:  #7b2cbf;
           font-weight: 600;
         }
         
@@ -1130,7 +1126,7 @@ const Home = () => {
         }
         
         .schedule-details .speaker-name {
-          color: #f82249;
+          color:  #7b2cbf;
           font-size: 14px;
           font-weight: 500;
           margin-top: 5px;
@@ -1172,11 +1168,11 @@ const Home = () => {
         }
         
         .venue-tab:hover {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .venue-tab.active {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .venue-tab.active::after {
@@ -1186,7 +1182,7 @@ const Home = () => {
           left: 0;
           width: 100%;
           height: 3px;
-          background: #f82249;
+          background:  #7b2cbf;
           animation: underlineGrow 0.3s ease-out;
         }
         
@@ -1293,7 +1289,7 @@ const Home = () => {
         
         /* Contact Section */
         #contact {
-          background: #060c22;
+          background: #180622ff;
           color: #fff;
         }
         
@@ -1322,7 +1318,7 @@ const Home = () => {
           display: flex;
           align-items: center;
           gap: 15px;
-          background: rgba(255,255,255,0.05);
+          background: rgba(159, 23, 177, 0.23);
           padding: 20px;
           border-radius: 5px;
           transition: all 0.3s ease;
@@ -1335,7 +1331,7 @@ const Home = () => {
         
         .contact-box i {
           font-size: 24px;
-          color: #f82249;
+          color:  #7b2cbf;
           transition: all 0.3s ease;
         }
         
@@ -1375,14 +1371,14 @@ const Home = () => {
         }
         
         .social-links a:hover {
-          background: #f82249;
+          background:  #7b2cbf;
           color: #fff;
           transform: translateY(-5px) scale(1.1);
         }
         
         /* Footer */
         .footer {
-          background: #0a0e23;
+         background: #240535ff;
           color: #fff;
         }
         
@@ -1417,7 +1413,7 @@ const Home = () => {
           left: 0;
           width: 50px;
           height: 2px;
-          background: #f82249;
+          background:  #7b2cbf;
           transition: width 0.3s ease;
         }
         
@@ -1454,7 +1450,7 @@ const Home = () => {
         }
         
         .footer-links a:hover {
-          color: #f82249;
+          color:  #7b2cbf;
         }
         
         .footer-newsletter input {
@@ -1470,11 +1466,11 @@ const Home = () => {
         
         .footer-newsletter input:focus {
           outline: none;
-          background: rgba(255,255,255,0.2);
+          background: rgba(56, 10, 63, 0.2);
         }
         
         .footer-newsletter button {
-          background: #f82249;
+          background:  #7b2cbf;
           color: #fff;
           border: none;
           padding: 10px 20px;
@@ -1486,12 +1482,12 @@ const Home = () => {
         }
         
         .footer-newsletter button:hover {
-          background: #e61e42;
+          background: rgba(26, 0, 51, 0.95);
           transform: translateY(-3px);
         }
         
         .footer-bottom {
-          background: #060c22;
+       rgba(242, 237, 247, 0.95)
           padding: 20px 0;
           text-align: center;
         }
@@ -1503,7 +1499,7 @@ const Home = () => {
         }
         
         .footer-bottom a {
-          color: #f82249;
+          color:  #7b2cbf;
           text-decoration: none;
           transition: all 0.3s ease;
         }

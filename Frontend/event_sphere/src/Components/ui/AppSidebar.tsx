@@ -12,7 +12,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarFooter,
-} from "@/components/ui/Sidebar"
+} from "@/Components/ui/Sidebar"
 
 import {
     DropdownMenu,
