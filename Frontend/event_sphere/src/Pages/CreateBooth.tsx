@@ -77,14 +77,29 @@ const CreateBooth = () => {
                 });
                 navigate('/dashboard/allbooths');
             }
-        } catch (error) {
-            console.error('Error: ', error.response?.data?.message || error.message);
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: error.response?.data?.message || 'Failed to create a booth.',
-            });
-        }
+     } catch (err) {
+  let errorMessage = "Failed to create a booth.";
+
+  if (err && typeof err === "object") {
+    if ("response" in err && err.response?.data?.message) {
+      errorMessage = err.response.data.message;
+    } else if ("message" in err) {
+      errorMessage = err.message;
+    }
+  } else if (typeof err === "string") {
+    errorMessage = err;
+  }
+
+  console.error("Error:", errorMessage);
+
+  toast({
+    variant: "destructive",
+    title: "Error",
+    description: errorMessage,
+  });
+}
+
+
     };
 
     return (
@@ -124,13 +139,15 @@ const CreateBooth = () => {
                                                     <SelectValue placeholder="Select an event" />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
-                                                {expoEvents.map((event) => (
-                                                    <SelectItem key={event._id} value={event._id}>
-                                                        {event.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
+                      <SelectContent>
+  {expoEvents.map((event) => (
+    <SelectItem key={event._id} value={event._id}>
+      {event.name}
+    </SelectItem>
+  ))}
+</SelectContent>
+
+                                          
                                         </Select>
                                         <FormMessage />
                                     </FormItem>

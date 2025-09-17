@@ -4,14 +4,14 @@ import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 import { Skeleton } from "@/Components/ui/Skeleton";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/Components/ui/Dialog"; // Shadcn Dialog Components
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/Components/ui/Card";
+import { Button } from "@/components/ui/button";
 import { Trash2, Edit } from "lucide-react"; // Icons for delete and edit
 import { useToast } from "@/hooks/use-toast"; // For toast notifications
-import { Input } from "@/components/ui/Input"; // Input for the form
-import { Calendar } from "@/components/ui/Calendar"; // Calendar component
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"; // Popover component
-import { EventList } from '@/components/attendee/event-list';
+import { Input } from "@/components/ui/input"; // Input for the form
+import { Calendar } from "@/Components/ui/Calendar"; // Calendar component
+import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/Popover"; // Popover component
+import { EventList } from '@/Components/attendee/event-list';
 import { ThemeProvider } from "@/Components/attendee/theme-provider";
 
 

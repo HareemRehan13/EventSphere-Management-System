@@ -1,7 +1,7 @@
 const User = require('../Models/User');
 const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-
+const crypto = require('crypto'); 
 const createUser = async (req, res) => {
     try {
         const { name, email, password, role, phone, organization } = req.body;
@@ -179,11 +179,12 @@ const deleteUser = async (req, res) => {
     }
 };
 
-const forgetPassword = async (req, res) => {
-    const { email, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required" });
+const forgetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
     }
 
     try {
@@ -192,16 +193,24 @@ const forgetPassword = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        const salt = await bcryptjs.genSalt(10);
-        user.password = await bcryptjs.hash(password, salt);
+        // Generate a 6-digit OTP
+        const otp = crypto.randomInt(100000, 999999);
+
+        // You can save OTP in user record or in a separate collection
+        user.resetOTP = otp;
+        user.otpExpiry = Date.now() + 15 * 60 * 1000; // OTP valid for 15 minutes
         await user.save();
 
-        res.status(200).json({ message: "Password updated successfully" });
+        // TODO: Send OTP via email using your email service
+        console.log(`OTP for ${email}: ${otp}`);
+
+        res.status(200).json({ token: otp, message: "OTP sent successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
+module.exports = { forgetPassword };
 const getUserCount = async (req, res) => {
     try {
         const userCount = await User.aggregate([

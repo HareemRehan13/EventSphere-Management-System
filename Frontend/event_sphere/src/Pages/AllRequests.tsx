@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button } from '@/Components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/Components/ui/Card';
 import { Toaster } from '@/Components/ui/Toaster';
 import { useToast } from "@/hooks/use-toast"

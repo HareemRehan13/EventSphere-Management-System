@@ -2,27 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/Components/ui/Button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/Form';
-import { Input } from '@/Components/ui/Input'
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/Select"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import { Input } from '@/components/ui/input'
 import { Send } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { useToast } from "@/hooks/use-toast"
 import { Toaster } from '@/Components/ui/Toaster';
-import { Textarea } from "@/Components/ui/Textarea"
+import { Textarea } from "@/Components/ui/textarea"
 import Modal from "react-modal";
 import { useLocation } from 'react-router-dom';
 import Register from './Register';
 
 const formSchema = z.object({
   productName: z.string().min(2).max(50),
-  productDescription: z.string().max(500).toLowerCase(),
+  productDescription: z.string().max(500),
   expoId: z.string(),
   companyId: z.string().nonempty("Company is required"),
 })
-
 
 const Exhibitor = () => {
   const { toast } = useToast()
@@ -102,59 +101,54 @@ const Exhibitor = () => {
       });
     }
   };
+async function onBoothSubmit() {
+  try {
+    const values = form.getValues();
+    const payload = {
+      ...values,
+      productDescription: values.productDescription?.toLowerCase() || "",
+      boothId: selectedBooth?._id,
+    };
 
-
-  async function onBoothSubmit() {
-    try {
-        console.log(form.getValues())
-      if (!selectedBooth) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Please select a booth before saving.",
-        });
-        return;
-      }
-      // Step 1: Post the exhibitor data
-      axios
-        .post('/api/exhibitor', {
-          ...form.getValues(),
-          boothId: selectedBooth._id,
-        }, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-        })
-        .then((response) => {
-          console.log(response);
-            toast({
-              variant: "default",
-              title: "Your booth request has been submitted",
-              description: "Wait for admin approval.",
-            })
-            setIsModalOpen(false);
-            fetchBooths(selectedBooth.expoId);
-
-        })
-        .catch((error) => {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: error.response?.data?.message || "An error occurred during the process.",
-          });
-        });
-
-    }
-    catch (error) {
-      console.error(error);
-      console.log(error.response?.data?.message);
+    if (!selectedBooth) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.response?.data?.message || "An error occurred during the process.",
-      })
+        description: "Please select a booth before saving.",
+      });
+      return;
     }
-  };
+
+    // Step 1: Post the exhibitor data
+    const response = await axios.post(
+      '/api/exhibitor',
+      payload,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }
+    );
+
+    console.log(response);
+    toast({
+      variant: "default",
+      title: "Your booth request has been submitted",
+      description: "Wait for admin approval.",
+    });
+
+    setIsModalOpen(false);
+    fetchBooths(selectedBooth.expoId);
+
+  } catch (error: any) {
+    console.error(error);
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: error.response?.data?.message || "An error occurred during the process.",
+    });
+  }
+};
 
 
   const onSubmit = async (values) => {
