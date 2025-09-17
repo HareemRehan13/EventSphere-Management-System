@@ -4,12 +4,12 @@ Password:herry1234
 
 
 Attendee:
-@gmail.com
-Pass:
+herry@gmail.com
+Pass:herry1234
 
 Exhibitor:
-@gmail.com
-Pass:
+abcd@gmail.com
+Pass: abcd1234
 
 Running commands:
 npm start    				//to run the backend
