@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,7 +20,9 @@ import { Toaster } from '@/Components/ui/Toaster';
 import { SignJWT } from 'jose';
 
 const formEmailSchema = z.object({
-  email: z.string().min(5).max(100)
+  email: z.string()
+    .min(5)
+    .max(100)
     .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[cC][oO][mM]$/, "Invalid email format"),
 });
 
@@ -98,18 +99,20 @@ const ForgetPassword = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-purple-900 to-black px-4">
         <Form {...formEmail}>
           <form
             onSubmit={formEmail.handleSubmit(onSubmit)}
-            className="space-y-6 w-96 bg-white/10 backdrop-blur-md text-white p-6 rounded-2xl shadow-2xl"
+            className="w-full max-w-md bg-black/80 backdrop-blur-md text-white p-8 rounded-3xl shadow-2xl border border-purple-700 hover:border-pink-500 transition-all duration-300 space-y-6"
           >
-            <h1 className="text-2xl font-bold text-center text-pink-400">Forgot Password</h1>
+            <h1 className="text-3xl font-bold text-center text-purple-300 drop-shadow-lg">
+              Forgot Password
+            </h1>
             <p className="text-center text-sm text-gray-300">
               Enter your email to receive a password reset OTP.
             </p>
 
-            {/* --- Email --- */}
+            {/* Email Field */}
             <FormField
               control={formEmail.control}
               name="email"
@@ -121,36 +124,36 @@ const ForgetPassword = () => {
                       placeholder="john.doe@example.com"
                       {...field}
                       autoComplete="off"
-                      className="bg-transparent border border-purple-500 text-white 
-                                 placeholder-gray-400 rounded-lg focus:outline-none 
-                                 focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="bg-gray-900 text-white placeholder-gray-400 border-purple-600 focus:border-pink-400 focus:ring-pink-400 rounded-lg px-3 py-2 transition"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-sm text-red-400" />
                 </FormItem>
               )}
             />
 
-            {/* --- Send OTP Button --- */}
+            {/* Send OTP Button */}
             <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90 rounded-xl"
               type="submit"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90 rounded-xl py-3 text-lg font-medium transition shadow-lg hover:shadow-pink-500/50"
             >
-              <BadgeCheck className="mr-2" /> Send OTP
+              <BadgeCheck className="w-5 h-5" /> Send OTP
             </Button>
 
-            <p className="text-center text-sm text-gray-300">
-              Don’t have an account?{" "}
-              <Link to="/register" className="text-pink-400 hover:underline">
-                Register
-              </Link>
-            </p>
-            <p className="text-center text-sm text-gray-300">
-              Already registered?{" "}
-              <Link to="/login" className="text-purple-400 hover:underline">
-                Login
-              </Link>
-            </p>
+            <div className="flex flex-col gap-2 text-center text-sm text-gray-300">
+              <p>
+                Don’t have an account?{" "}
+                <Link to="/register" className="text-pink-400 hover:text-purple-300 hover:underline transition">
+                  Register
+                </Link>
+              </p>
+              <p>
+                Already registered?{" "}
+                <Link to="/login" className="text-purple-400 hover:text-pink-400 hover:underline transition">
+                  Login
+                </Link>
+              </p>
+            </div>
           </form>
         </Form>
       </div>

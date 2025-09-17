@@ -1,3 +1,4 @@
+const moment = require('moment'); // ✅ Add this at top
 const User = require('../Models/User');
 const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken');
@@ -226,6 +227,21 @@ const getUserCount = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+const getRecentUsers = async (req, res) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 }).limit(5);
+    const recentUsers = users.map(user => ({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+      timeAgo: moment(user.createdAt).fromNow()
+    }));
+    res.status(200).json(recentUsers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // ✅ Final exports
 module.exports = {
@@ -236,5 +252,6 @@ module.exports = {
     getAllUsers,
     deleteUser,
     forgetPassword,
-    getUserCount
+    getUserCount,
+    getRecentUsers
 };

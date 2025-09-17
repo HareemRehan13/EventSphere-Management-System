@@ -1,3 +1,4 @@
+const moment = require('moment'); // ✅ Add this at top
 const Company = require("../Models/Company");
 const mongoose = require("mongoose");
 
@@ -100,6 +101,20 @@ const deleteCompanyById = async (req, res) => {
         res.status(500).send(error);
     }
 };
+const getRecentCompanies = async (req, res) => {
+  try {
+    const companies = await Company.find().sort({ createdAt: -1 }).limit(5).populate("userId", "name email");
+    const recentCompanies = companies.map(company => ({
+      companyName: company.companyName,
+      owner: company.userId?.name || null,
+      createdAt: company.createdAt,
+      timeAgo: moment(company.createdAt).fromNow()
+    }));
+    res.status(200).json(recentCompanies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
     createCompany,
@@ -107,5 +122,6 @@ module.exports = {
     getCompanyById,
     updateCompanyById,
     deleteCompanyById,
-    GetCompanyByExhibitor
+    GetCompanyByExhibitor,
+    getRecentCompanies
   };

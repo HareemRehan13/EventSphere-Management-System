@@ -7,8 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/Components/ui/Card"
-// import { Grid } from "@/components/ui/grid"; // Optional if you have a Grid layout setup
+} from "@/Components/ui/Card";
 import { Skeleton } from "@/Components/ui/Skeleton";
 
 // Define Booth type
@@ -38,44 +37,63 @@ const ShowAllBooth: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchBooths();
   }, []);
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-semibold mb-6 text-center">All Booths</h1>
+    <div className="min-h-screen bg-gradient-to-b from-black via-purple-900 to-black p-8">
+      <h1 className="text-3xl font-bold mb-8 text-center text-purple-300 drop-shadow-lg">
+        All Booths
+      </h1>
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton key={index} className="h-40 w-full rounded-lg" />
+            <Skeleton key={index} className="h-44 w-full rounded-2xl" />
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {booths.map((booth) => (
-            <Card key={booth._id} className="shadow-lg rounded-lg bg-slate-900 text-white">
-              <CardHeader>
-                <CardTitle className="text-lg">Booth Number: {booth.boothNumber}</CardTitle>
-                <CardDescription>
+            <Card
+              key={booth._id}
+              className="bg-black/70 text-white shadow-xl border border-purple-700 rounded-2xl hover:scale-105 transition-transform duration-300 hover:shadow-2xl"
+            >
+              <CardHeader className="border-b border-purple-700 pb-2">
+                <CardTitle className="text-lg text-purple-300">
+                  Booth Number: {booth.boothNumber}
+                </CardTitle>
+                <CardDescription className="text-gray-300">
                   Event: <span className="font-semibold">{booth.expoId.name}</span>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+
+              <CardContent className="space-y-2">
                 <p className="text-sm">
                   Availability Status:{" "}
                   <span
-                    className={`font-semibold ${booth.isBooked ? "text-red-600" : "text-green-600"
-                      }`}
+                    className={`font-semibold ${
+                      booth.isBooked ? "text-red-500" : "text-green-400"
+                    }`}
                   >
                     {booth.isBooked ? "Booked" : "Available"}
                   </span>
                 </p>
                 <p className="text-sm">
-                  Floor: <span className="font-semibold">{booth.floor == "F1" ? "Ground FLoor" : booth.floor == "F2" ? "First Floor" : "Second Floor"  }</span>
+                  Floor:{" "}
+                  <span className="font-semibold">
+                    {booth.floor === "F1"
+                      ? "Ground Floor"
+                      : booth.floor === "F2"
+                      ? "First Floor"
+                      : "Second Floor"}
+                  </span>
                 </p>
               </CardContent>
+
+              <CardFooter className="text-gray-400 text-sm border-t border-purple-700 pt-2">
+                Created At: {new Date().toLocaleDateString()} {/* You can replace with booth.createdAt if available */}
+              </CardFooter>
             </Card>
           ))}
         </div>

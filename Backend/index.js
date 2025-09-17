@@ -86,30 +86,58 @@ app.put('/api/exhibitor/:ExhibitorId', protect, exhibitorController.ExhibitorIsA
 app.get('/api/exhibitor/contact-info-exchange/:ExhibitorId', protect, exhibitorController.ContactInfoExchange);
 app.get('/api/all-exhibitor', protect, exhibitorController.allExhibitors);
 
-// ---------------- STATS ROUTE ----------------
+// ---------------- STATS + RECENT ROUTE ----------------
 app.get('/api/stats', async (req, res) => {
-    try {
-        const attendees = await User.countDocuments({ role: "ATTENDEE" });
-        const exhibitors = await User.countDocuments({ role: "EXHIBITOR" });
-        const companies = await Company.countDocuments();
-        const booths = await Booth.countDocuments();
-        const expos = await Expo.countDocuments();
+  try {
+    const attendees = await User.countDocuments({ role: "ATTENDEE" });
+    const exhibitors = await User.countDocuments({ role: "EXHIBITOR" });
+    const companies = await Company.countDocuments();
+    const booths = await Booth.countDocuments();
+    const expos = await Expo.countDocuments();
 
-        res.json({
-            attendees,
-            exhibitors,
-            companies,
-            booths,
-            expos,
-        });
-    } catch (err) {
-        res.status(500).json({ message: "Error fetching stats", error: err.message });
-    }
+    // Recent items
+    const getRecentUsers = await User.find().sort({ createdAt: -1 }).limit(5);
+    
+    const getRecentExpos = await Expo.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select('name startDate endDate venue organizerName createdAt');
+
+    const getRecentBooths = await Booth.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate('expoId', 'name')  // Populate expo name
+      .select('boothNumber floor isBooked Assignedto createdAt expoId');
+
+    res.json({
+      attendees,
+      exhibitors,
+      companies,
+      booths,
+      expos,
+      recentUsers: getRecentUsers,
+      recentExpos: getRecentExpos,
+      recentBooths: getRecentBooths
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching stats", error: err.message });
+  }
 });
+
 
 // ---------------- START SERVER ----------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, async () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-    await connectDB();
-});
+
+const startServer = async () => {
+    try {
+        await connectDB(); // Connect MongoDB first
+        app.listen(PORT, () => {
+            console.log(`✅ Server running on http://localhost:${PORT}`);
+        });
+    } catch (err) {
+        console.error("❌ Failed to start server:", err.message);
+    }
+};
+
+startServer();

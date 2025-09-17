@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -36,8 +35,7 @@ const formSchema = z.object({
 const CreateBooth = () => {
     const { toast } = useToast();
     const navigate = useNavigate();
-
-    const [expoEvents, setExpoEvents] = useState<Array<{ id: string; name: string }>>([]);
+    const [expoEvents, setExpoEvents] = useState<Array<{ _id: string; name: string }>>([]);
 
     useEffect(() => {
         const fetchExpoEvents = async () => {
@@ -53,64 +51,39 @@ const CreateBooth = () => {
                 });
             }
         };
-
         fetchExpoEvents();
     }, [toast]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            boothNumber: '',
-            expoId: '',
-            floor: '',
-        },
+        defaultValues: { boothNumber: '', expoId: '', floor: '' },
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const response = await axios.post('/api/booths', values);
             if (response.status === 201) {
-                toast({
-                    variant: 'default',
-                    title: 'Success',
-                    description: 'You have created a booth successfully',
-                });
+                toast({ variant: 'default', title: 'Success', description: 'Booth created successfully!' });
                 navigate('/dashboard/allbooths');
             }
-     } catch (err) {
-  let errorMessage = "Failed to create a booth.";
+        } catch (err: any) {
+            let errorMessage = "Failed to create a booth.";
+            if (err.response?.data?.message) errorMessage = err.response.data.message;
+            else if (err.message) errorMessage = err.message;
 
-  if (err && typeof err === "object") {
-    if ("response" in err && err.response?.data?.message) {
-      errorMessage = err.response.data.message;
-    } else if ("message" in err) {
-      errorMessage = err.message;
-    }
-  } else if (typeof err === "string") {
-    errorMessage = err;
-  }
-
-  console.error("Error:", errorMessage);
-
-  toast({
-    variant: "destructive",
-    title: "Error",
-    description: errorMessage,
-  });
-}
-
-
+            toast({ variant: "destructive", title: "Error", description: errorMessage });
+        }
     };
 
     return (
         <>
-            <div className="container flex flex-col justify-center items-center mx-auto px-4 ">
-            <h1 className="text-2xl font-semibold mb-6 text-center">Create Booth</h1>
+            <div className="min-h-screen flex flex-col justify-center items-center mx-auto px-4 bg-gradient-to-b from-black via-purple-900 to-black py-12">
+                <h1 className="text-3xl font-bold mb-8 text-center text-purple-300 drop-shadow-lg">Create Booth</h1>
+
                 <Form {...form}>
                     <form
-                        method="post"
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-8 bg-slate-900 text-white p-5 rounded-2xl w-full max-w-4xl"
+                        className="space-y-8 bg-black/80 backdrop-blur-md text-white p-8 rounded-2xl shadow-2xl border border-purple-700 w-full max-w-4xl"
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField
@@ -120,7 +93,11 @@ const CreateBooth = () => {
                                     <FormItem>
                                         <FormLabel>Booth Number</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="5876" {...field} />
+                                            <Input
+                                                {...field}
+                                                placeholder="5876"
+                                                className="bg-gray-900 text-white border-purple-600 focus:border-purple-400 focus:ring-purple-400"
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -135,24 +112,23 @@ const CreateBooth = () => {
                                         <FormLabel>Expo Event</FormLabel>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="bg-gray-900 text-white border-purple-600 focus:border-purple-400 focus:ring-purple-400">
                                                     <SelectValue placeholder="Select an event" />
                                                 </SelectTrigger>
                                             </FormControl>
-                      <SelectContent>
-  {expoEvents.map((event) => (
-    <SelectItem key={event._id} value={event._id}>
-      {event.name}
-    </SelectItem>
-  ))}
-</SelectContent>
-
-                                          
+                                            <SelectContent className="bg-gray-900 text-white">
+                                                {expoEvents.map(event => (
+                                                    <SelectItem key={event._id} value={event._id}>
+                                                        {event.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
                                         </Select>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+
                             <FormField
                                 control={form.control}
                                 name="floor"
@@ -161,21 +137,14 @@ const CreateBooth = () => {
                                         <FormLabel>Floor</FormLabel>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="bg-gray-900 text-white border-purple-600 focus:border-purple-400 focus:ring-purple-400">
                                                     <SelectValue placeholder="Select Floor" />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="F1">
-                                                    Ground Floor
-                                                </SelectItem>
-                                                <SelectItem value="F2">
-                                                    First Floor
-                                                </SelectItem>
-                                                <SelectItem value="F3">
-                                                    Second Floor
-                                                </SelectItem>
-
+                                            <SelectContent className="bg-gray-900 text-white">
+                                                <SelectItem value="F1">Ground Floor</SelectItem>
+                                                <SelectItem value="F2">First Floor</SelectItem>
+                                                <SelectItem value="F3">Second Floor</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -185,14 +154,15 @@ const CreateBooth = () => {
                         </div>
 
                         <Button
-                            className="w-full bg-white text-black hover:bg-black hover:text-white"
                             type="submit"
+                            className="w-full bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-bold shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2"
                         >
                             <CircleFadingArrowUp /> Add Booth
                         </Button>
                     </form>
                 </Form>
-                <Link to="/dashboard/allbooths" className="text-rose-950 mt-5">
+
+                <Link to="/dashboard/allbooths" className="mt-5 text-purple-400 hover:text-purple-200 transition-colors">
                     Show All Booths
                 </Link>
             </div>

@@ -23,6 +23,6 @@ const boothSchema = new mongoose.Schema({
     type: String, 
     default: null
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Booth", boothSchema);

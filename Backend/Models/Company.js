@@ -9,47 +9,32 @@ const companySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
     companyAddress: {
         type: String,
         required: true,
     },
-
     companyEmail: {
         type: String,
         required: true,
     },
-
     companyContact: {
         type: String,
         required: true,
     },
-
     companyService: {
         type: String,
         required: true,
     },
-
     requireDocument: {
         type: String,
         required: true,
     },
-
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User", 
         required: true 
-     },
-   
-    createdAt: {
-        type: Date,
-        default: Date.now,
     },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
+}, { timestamps: true }); // ✅ automatically adds createdAt and updatedAt
 
 const Company = mongoose.model('Company', companySchema);
 module.exports = Company;

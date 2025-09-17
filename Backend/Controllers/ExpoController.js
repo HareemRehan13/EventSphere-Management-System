@@ -1,3 +1,5 @@
+
+const moment = require('moment'); // ✅ Add this at top
 const Expo = require("../Models/Expo");
 const Booth = require("../Models/Booth");
 const mongoose = require("mongoose");
@@ -214,6 +216,21 @@ const deleteExpo = async (req, res) => {
     return res.status(500).json({ message: "An error occurred while deleting the expo", error: error.message });
   }
 };
+const getRecentExpos = async (req, res) => {
+  try {
+    const expos = await Expo.find().sort({ createdAt: -1 }).limit(5).populate("booths");
+    const recentExpos = expos.map(expo => ({
+      name: expo.name,
+      startDate: expo.startDate,
+      endDate: expo.endDate,
+      createdAt: expo.createdAt,
+      timeAgo: moment(expo.createdAt).fromNow()
+    }));
+    res.status(200).json(recentExpos);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createExpo,
@@ -221,4 +238,5 @@ module.exports = {
   getAllExpos,
   getExpoById,
   deleteExpo,
+  getRecentExpos
 };

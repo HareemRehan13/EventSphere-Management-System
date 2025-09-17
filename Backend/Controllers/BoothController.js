@@ -1,3 +1,4 @@
+const moment = require('moment');
 const Booth = require("../Models/Booth");
 const Expo = require("../Models/Expo");
 const mongoose = require("mongoose");
@@ -154,11 +155,29 @@ const deleteBooth = async (req, res) => {
   }
 };
 
+const getRecentBooths = async (req, res) => {
+  try {
+    const booths = await Booth.find().sort({ createdAt: -1 }).limit(5).populate("expoId", "name");
+    const recentBooths = booths.map(booth => ({
+      boothNumber: booth.boothNumber,
+      expo: booth.expoId?.name || null,
+      floor: booth.floor,
+      isBooked: booth.isBooked,
+      createdAt: booth.createdAt,
+      timeAgo: moment(booth.createdAt).fromNow()
+    }));
+    res.status(200).json(recentBooths);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addBooth,
   getAllBooths,
   getBoothsByExpo,
   updateBooth,
   deleteBooth,
-  BoothIsBooked
+  BoothIsBooked,
+   getRecentBooths
 };
