@@ -167,12 +167,12 @@ export function AppSidebar() {
                                 side="top"
                                 className="w-[--radix-popper-anchor-width] hover:cursor-pointer"
                             >
-                                <DropdownMenuItem className="hover:cursor-pointer">
+                                {/* <DropdownMenuItem className="hover:cursor-pointer">
                                     <span>Account</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="hover:cursor-pointer">
                                     <span>Billing</span>
-                                </DropdownMenuItem>
+                                </DropdownMenuItem> */}
                                 <DropdownMenuItem className="hover:cursor-pointer" onClick={handleLogout}>
                                     <span>Sign out</span>
                                 </DropdownMenuItem>

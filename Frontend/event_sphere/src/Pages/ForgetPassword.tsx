@@ -3,7 +3,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/Form';
 import { Input } from '@/components/ui/input';
 import { BadgeCheck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -26,11 +34,7 @@ const ForgetPassword = () => {
     defaultValues: { email: "" },
   });
 
-  // Get secret key from environment
   const secretKey = import.meta.env.VITE_SECRET_KEY;
-  if (!secretKey) {
-    console.error("VITE_SECRET_KEY is not defined in environment variables.");
-  }
   const secret = secretKey ? new TextEncoder().encode(secretKey) : undefined;
 
   const onSubmit = async (values: z.infer<typeof formEmailSchema>) => {
@@ -44,17 +48,12 @@ const ForgetPassword = () => {
     }
 
     try {
-      // Send email to backend to request OTP
-axios.defaults.baseURL = 'http://localhost:5000';
-
-const response = await axios.post('/api/reset-password', values);
-
-      console.log("Server response:", response.data);
+      axios.defaults.baseURL = 'http://localhost:5000';
+      const response = await axios.post('/api/reset-password', values);
 
       if (response.status === 200 && response.data.token) {
         const otp = response.data.token;
 
-        // Sign JWT
         let token;
         try {
           token = await new SignJWT({ otp, email: values.email })
@@ -64,8 +63,7 @@ const response = await axios.post('/api/reset-password', values);
             .setAudience('event-sphere')
             .setExpirationTime('15m')
             .sign(secret);
-        } catch (jwtError) {
-          console.error("JWT signing error:", jwtError);
+        } catch {
           toast({
             variant: "destructive",
             title: "JWT Error",
@@ -83,30 +81,35 @@ const response = await axios.post('/api/reset-password', values);
 
         navigate(`/verify-otp`);
       } else {
-        console.warn("OTP token missing in server response:", response.data);
         toast({
           variant: "destructive",
           title: "Error",
           description: response.data?.message || "OTP token not received from server.",
         });
       }
-
     } catch (error: any) {
-  console.error("Error sending OTP:", error.response || error.message || error);
-  toast({
-    variant: "destructive",
-    title: "Error",
-    description: error.response?.data?.message || error.message || "Unexpected error occurred.",
-  });
-}
-
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response?.data?.message || error.message || "Unexpected error occurred.",
+      });
+    }
   };
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
         <Form {...formEmail}>
-          <form onSubmit={formEmail.handleSubmit(onSubmit)} className="space-y-8 w-96 bg-slate-900 text-white p-5 rounded-2xl">
+          <form
+            onSubmit={formEmail.handleSubmit(onSubmit)}
+            className="space-y-6 w-96 bg-white/10 backdrop-blur-md text-white p-6 rounded-2xl shadow-2xl"
+          >
+            <h1 className="text-2xl font-bold text-center text-pink-400">Forgot Password</h1>
+            <p className="text-center text-sm text-gray-300">
+              Enter your email to receive a password reset OTP.
+            </p>
+
+            {/* --- Email --- */}
             <FormField
               control={formEmail.control}
               name="email"
@@ -114,24 +117,42 @@ const response = await axios.post('/api/reset-password', values);
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="john.doe@example.com" {...field} autoComplete="off" />
+                    <Input
+                      placeholder="john.doe@example.com"
+                      {...field}
+                      autoComplete="off"
+                      className="bg-transparent border border-purple-500 text-white 
+                                 placeholder-gray-400 rounded-lg focus:outline-none 
+                                 focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                    />
                   </FormControl>
-                  <FormDescription>
-                    Enter your email address to receive a password reset OTP.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button className="w-full bg-white text-black hover:bg-black hover:text-white" type="submit">
-              <BadgeCheck /> Send OTP
+            {/* --- Send OTP Button --- */}
+            <Button
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90 rounded-xl"
+              type="submit"
+            >
+              <BadgeCheck className="mr-2" /> Send OTP
             </Button>
+
+            <p className="text-center text-sm text-gray-300">
+              Don’t have an account?{" "}
+              <Link to="/register" className="text-pink-400 hover:underline">
+                Register
+              </Link>
+            </p>
+            <p className="text-center text-sm text-gray-300">
+              Already registered?{" "}
+              <Link to="/login" className="text-purple-400 hover:underline">
+                Login
+              </Link>
+            </p>
           </form>
         </Form>
-
-        <Link to="/register" className='text-rose-950 mt-5'>Don't have an account?</Link>
-        <Link to="/" className='text-rose-950 mt-2'>Already Registered?</Link>
       </div>
 
       <Toaster />
