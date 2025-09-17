@@ -1,8 +1,6 @@
-import React, { useMemo, useEffect, useState } from 'react'
-import { Bar, BarChart } from "recharts"
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
-
 import {
   Card,
   CardContent,
@@ -11,130 +9,77 @@ import {
   CardHeader,
   CardTitle,
 } from "@/Components/ui/Card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/Components/ui/Chart"
-import axios from 'axios'
-
-
 
 const Dashboard = () => {
-
-  const [attendeeCount, setAttendeeCount] = useState(0)
-  const [exhibitorCount, setExhibitorCount] = useState(0)
-
-  const chartData = [
-    { visitorName: "ATTENDEES", visitors: attendeeCount, fill: "var(--color-attendees)" },
-    { visitorName: "EXHIBITORS", visitors: exhibitorCount, fill: "var(--color-exhibitors)" },
-
-
-  ]
-
-
-  const chartConfig = {
-    attendees: {
-      label: "Attendees",
-      color: "hsl(var(--chart-1))",
-    },
-    exhibitors: {
-      label: "Exhibitors",
-      color: "hsl(var(--chart-2))",
-    },
-
-  } satisfies ChartConfig
-
-  const totalVisitors = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+  const [stats, setStats] = useState({
+    attendees: 0,
+    exhibitors: 0,
+    companies: 0,
+    booths: 0,
+    expos: 0
+  })
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       try {
-        const response = await axios.get('/api/user_count')
-        console.log(response.data)
-        console.log(response.data.userCount.ATTENDEES)
-        setAttendeeCount(response.data.userCount.ATTENDEES)
-        setExhibitorCount(response.data.userCount.EXHIBITORS)
+        const response = await axios.get('/api/stats')
+        setStats(response.data)
       } catch (error) {
-        console.error('Error fetching visitors:', error)
+        console.error("Error fetching stats:", error)
       }
     })()
   }, [])
 
+  const totalUsers = stats.attendees + stats.exhibitors
+
+  const cards = [
+    { title: "Attendees", value: stats.attendees, color: "text-purple-400" },
+    { title: "Exhibitors", value: stats.exhibitors, color: "text-pink-400" },
+    { title: "Companies", value: stats.companies, color: "text-indigo-400" },
+    { title: "Booths", value: stats.booths, color: "text-blue-400" },
+    { title: "Expos", value: stats.expos, color: "text-green-400" },
+  ]
+
   return (
-    <>
-      <div className="flex flex-col items-center justify-center h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 p-8 text-white">
+      <h1 className="text-4xl font-bold mb-6 text-center">Admin Dashboard</h1>
 
-        <Card className="flex flex-col">
-          <CardHeader className="items-center pb-0">
-            <CardTitle>Total Users</CardTitle>
-            <CardDescription>These are the total users who are registered in the site.</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 pb-0">
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square max-h-[250px]"
-            >
-              <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Pie
-                  data={chartData}
-                  dataKey="visitors"
-                  nameKey="visitorName"
-                  innerRadius={60}
-                  strokeWidth={5}
-                >
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className="fill-foreground text-3xl font-bold"
-                            >
-                              {totalVisitors.toLocaleString()}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground"
-                            >
-                              Visitors
-                            </tspan>
-                          </text>
-                        )
-                      }
-                    }}
-                  />
-                </Pie>
-              </PieChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col gap-2 text-sm">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="leading-none text-muted-foreground">
-              Showing total visitors for the last 6 months
-            </div>
-          </CardFooter>
-        </Card>
+      {/* Total Users Summary */}
+      <Card className="bg-white/10 backdrop-blur-md text-white shadow-2xl rounded-2xl mb-8">
+        <CardHeader>
+          <CardTitle className="text-2xl">Total Users</CardTitle>
+          <CardDescription className="text-gray-300">
+            Combined number of attendees & exhibitors
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-5xl font-bold">{totalUsers}</p>
+        </CardContent>
+        <CardFooter className="flex items-center gap-2 text-sm text-pink-400">
+          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        </CardFooter>
+      </Card>
 
+      {/* Individual Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cards.map((card, idx) => (
+          <Card
+            key={idx}
+            className="bg-white/10 backdrop-blur-md text-white shadow-lg rounded-2xl hover:scale-105 transition-transform"
+          >
+            <CardHeader>
+              <CardTitle className={`text-xl ${card.color}`}>{card.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-4xl font-bold">{card.value}</p>
+            </CardContent>
+            <CardFooter className="text-gray-300 text-sm">
+              Showing live count from database
+            </CardFooter>
+          </Card>
+        ))}
       </div>
-    </>
+    </div>
   )
 }
 

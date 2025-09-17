@@ -730,6 +730,7 @@ const SidebarMenuSubButton = React.forwardRef<
       {...props}
     />
   )
+  
 })
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton"
 
