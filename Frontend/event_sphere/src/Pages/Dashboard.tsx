@@ -48,7 +48,7 @@ const Dashboard = () => {
       <h1 className="text-4xl font-bold mb-6 text-center text-purple-300 drop-shadow-lg">Admin Dashboard</h1>
 
       {/* ---------------- Recent Items ---------------- */}
-      <h2 className="text-3xl font-semibold mb-4 text-gray-300">Recent Items</h2>
+      <h2 className="text-3xl font-semibold mb-4 text-gray-300">Recently Activation</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* Recent Users */}
         <Card className="bg-black/80 backdrop-blur-md text-white shadow-xl rounded-2xl p-4 border border-purple-700 hover:scale-105 hover:shadow-2xl transition-transform duration-300">
