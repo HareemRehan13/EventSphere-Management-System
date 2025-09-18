@@ -242,6 +242,47 @@ const getRecentUsers = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const verifyOTP = async (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+        return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (!user.resetOTP || user.otpExpiry < Date.now()) {
+            return res.status(400).json({ message: "OTP expired. Please request a new one." });
+        }
+
+        if (parseInt(otp) !== user.resetOTP) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+
+        // OTP verified, generate JWT for password reset
+        const jwt = require('jsonwebtoken');
+        const token = jwt.sign(
+            { email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        // Remove OTP from DB
+        user.resetOTP = undefined;
+        user.otpExpiry = undefined;
+        await user.save();
+
+        res.status(200).json({ message: "OTP verified", token });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 
 // ✅ Final exports
 module.exports = {
@@ -253,5 +294,6 @@ module.exports = {
     deleteUser,
     forgetPassword,
     getUserCount,
-    getRecentUsers
+    getRecentUsers,
+    verifyOTP
 };

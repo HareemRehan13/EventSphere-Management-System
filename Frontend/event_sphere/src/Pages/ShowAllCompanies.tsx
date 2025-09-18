@@ -7,7 +7,6 @@ import { Trash2, Edit } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
-// 🔹 Step 1: Define Company Interface
 interface Company {
   _id: string;
   name: string;
@@ -23,7 +22,7 @@ interface Company {
 
 const ShowAllCompanies: React.FC = () => {
   const { toast } = useToast();
-  const [Companies, setCompanies] = useState<Company[]>([]); // ✅ Strong typing
+  const [Companies, setCompanies] = useState<Company[]>([]);
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
@@ -78,65 +77,67 @@ const ShowAllCompanies: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-8">
-      <h1 className="text-2xl font-semibold mb-6 text-center">All Companies</h1>
+    <div className="min-h-screen bg-gradient-to-b from-black via-purple-900 to-black py-12 px-4">
+      <div className="container mx-auto">
+        <h1 className="text-3xl font-bold text-center text-purple-300 mb-8 drop-shadow-lg">All Companies</h1>
 
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton key={index} className="h-40 w-full rounded-lg" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {Companies.map((company) => (
-            <Card key={company._id} className="shadow-lg rounded-lg bg-slate-900 text-white">
-              <CardHeader className="relative">
-                <div className="absolute right-4 top-4 flex flex-col space-y-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="p-2"
-                    onClick={() => handleDelete(company._id)}
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </Button>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} className="h-52 w-full rounded-2xl shadow-lg" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Companies.map((company) => (
+              <Card key={company._id} className="bg-black/80 backdrop-blur-md border border-purple-700 shadow-2xl rounded-2xl text-white transition-all hover:scale-105 hover:shadow-purple-600">
+                <CardHeader className="relative">
+                  <div className="absolute right-4 top-4 flex flex-col space-y-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="p-2 text-red-500 hover:text-red-400"
+                      onClick={() => handleDelete(company._id)}
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
 
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="p-2"
-                    onClick={() => handleEdit(company._id)}
-                  >
-                    <Edit className="h-5 w-5" />
-                  </Button>
-                </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="p-2 text-purple-400 hover:text-purple-300"
+                      onClick={() => handleEdit(company._id)}
+                    >
+                      <Edit className="h-5 w-5" />
+                    </Button>
+                  </div>
 
-                <CardTitle className="text-lg font-semibold">{company.name}</CardTitle>
-                <CardDescription className="break-words whitespace-normal overflow-hidden">
-                  {company.description}
-                </CardDescription>
-              </CardHeader>
+                  <CardTitle className="text-xl font-semibold text-purple-300">{company.name}</CardTitle>
+                  <CardDescription className="break-words whitespace-normal overflow-hidden text-purple-100">
+                    {company.description}
+                  </CardDescription>
+                </CardHeader>
 
-              <CardContent>
-                <p className="text-sm"><span className="font-semibold">Company Name:</span> {company.companyName}</p>
-                <p className="text-sm"><span className="font-semibold">Company Description:</span> {company.companyDescription}</p>
-                <p className="text-sm"><span className="font-semibold">Company Service:</span> {company.companyService}</p>
-                <p className="text-sm"><span className="font-semibold">Company Email:</span> {company.companyEmail}</p>
-                <p className="text-sm"><span className="font-semibold">Company Contact:</span> {company.companyContact}</p>
-                <p className="text-sm"><span className="font-semibold">Company Address:</span> {company.companyAddress}</p>
-              </CardContent>
+                <CardContent className="space-y-1 text-sm text-purple-100">
+                  <p><span className="font-semibold text-purple-300">Company Name:</span> {company.companyName}</p>
+                  <p><span className="font-semibold text-purple-300">Description:</span> {company.companyDescription}</p>
+                  <p><span className="font-semibold text-purple-300">Service:</span> {company.companyService}</p>
+                  <p><span className="font-semibold text-purple-300">Email:</span> {company.companyEmail}</p>
+                  <p><span className="font-semibold text-purple-300">Contact:</span> {company.companyContact}</p>
+                  <p><span className="font-semibold text-purple-300">Address:</span> {company.companyAddress}</p>
+                </CardContent>
 
-              <CardFooter className="flex justify-between text-sm border-t border-slate-700 pt-2">
-                <span>
-                  <span className="font-semibold">Created At:</span>{" "}
-                  {new Date(company.createdAt).toLocaleDateString()}
-                </span>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      )}
+                <CardFooter className="flex justify-between text-sm border-t border-purple-700 pt-2 text-purple-200">
+                  <span>
+                    <span className="font-semibold text-purple-300">Created At:</span>{" "}
+                    {new Date(company.createdAt).toLocaleDateString()}
+                  </span>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

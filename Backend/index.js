@@ -46,6 +46,8 @@ app.put('/api/users/:userId', userController.updateUser);
 
 // Verify routes
 app.post('/api/reset-password', userController.forgetPassword);
+app.post('/api/verify-otp', userController.verifyOTP);
+
 
 // ---------------- EXPO ROUTES ----------------
 app.post('/api/expos', expoController.createExpo);
